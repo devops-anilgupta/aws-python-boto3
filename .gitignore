@@ -1,0 +1,24 @@
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+*.egg-info/
+*.egg
+
+# VSCode settings
+.vscode/
+
+# Virtual environment
+.env/
+.venv/
+env/
+venv/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# AWS credentials (NEVER commit secrets!)
+*.pem
+*.key
+*.crt
+*.aws/

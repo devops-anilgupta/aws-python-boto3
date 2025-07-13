@@ -1,0 +1,7 @@
+aws configure list-profiles
+aws configure --profile dev
+aws s3 ls --profile dev
+
+execute python file: 
+python <<file_name>>.py 
+
