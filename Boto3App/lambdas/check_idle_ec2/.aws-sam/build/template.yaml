@@ -1,0 +1,26 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Check Idle resources in EC2 using AWS SAM
+Globals:
+  Function:
+    Runtime: python3.11
+    Timeout: 30
+    MemorySize: 128
+    CodeUri: .
+Resources:
+  CheckIdleEC2Function:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: lambda_function.check_idle_ec2
+      Policies:
+      - CloudWatchReadOnlyAccess
+      - AWSLambdaBasicExecutionRole
+      - AmazonEC2ReadOnlyAccess
+      Events:
+        ScheduleEvent:
+          Type: Schedule
+          Properties:
+            Schedule: rate(1 hour)
+      CodeUri: CheckIdleEC2Function
+    Metadata:
+      SamResourceId: CheckIdleEC2Function

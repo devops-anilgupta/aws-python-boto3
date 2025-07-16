@@ -1,0 +1,26 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Deploy multiple AWS Lambda functions using AWS SAM
+
+Global:
+  FunctionRuntime: python3.11.2
+  CodeUri: ./lambdas/notify_idle_resources/
+  Timeout: 30
+  MemorySize: 128
+
+Resources:
+  NotifyIdleResourcesFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: app.notify_idle_resources
+      Runtime: python3.11.2
+      CodeUri: ./lambdas/notify_idle_resources/
+      MemorySize: 128
+      Timeout: 30
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AWSLambdaVPCAccessExecutionRole
+      Environment:
+        VPC_ID: !Ref VPCID
+        SUBNET_IDS: !Ref SubnetIDs
+        SECURITY_GROUP_IDS: !Ref SecurityGroupIDs

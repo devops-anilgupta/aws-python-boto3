@@ -1,7 +1,21 @@
+//Setting up AWS IAM user 
 aws configure list-profiles
 aws configure --profile dev
 aws s3 ls --profile dev
 
-execute python file: 
+//Executing the python file 
 python <<file_name>>.py 
 
+//SAM build, validate, deploy and delete.  
+sam build --profile dev
+sam validate --profile dev --lint
+sam deploy --guided --profile dev
+aws cloudformation delete-stack --stack-name checkIdleEc2 --profile dev
+
+//This is to return aws lambda functions
+    aws lambda list-functions --profile dev --region us-east-1
+//List only Lambda names (CLI)
+    aws lambda list-functions \
+    --query "Functions[*].FunctionName" \
+    --output text \
+    --profile dev --region us-east-1

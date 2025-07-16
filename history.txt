@@ -1,0 +1,97 @@
+//this is to connect ec2 from local
+ssh -i key-pair.pem ec2-user@34.238.255.240
+
+vscode ➜ .../AWS-Boto3-Python/Boto3App/lambdas/check_idle_ec2 (main) $ history
+    1  aws configure list-profiles
+    2  which aws
+    3  sudo apt update
+    4  sudo apt install unzip curl -y
+    5  curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+    6  unzip awscliv2.zip
+    7  sudo ./aws/install
+    8  aws --version
+    9  pip install boto3
+   10  pip install --upgrade pip
+   11  python create-s3-bucket.py --profile dev
+   12  cd Boto3App/
+   13  clear
+   14  python create-s3-bucket.py --profile dev
+   15  python3 create_bucket.py
+   16  python3 create-s3-bucket.py 
+   17  aws configure list-profiles
+   18  aws configure --profile dev
+   19  aws s3 ls
+   20  $env:AWS_PROFILE = "dev"
+   21  aws s3 ls --profile dev
+   22  cd Boto3App/
+   23  python create-s3-bucket.py 
+   24  git init
+   25  git add .
+   26  git config --global user.name "Anil"
+   27  git config --global user.email "devops.anilgupta@gmail.com"
+   28  git origin
+   29  git url
+   30  git push
+   31  git add README.md
+   32  echo "# aws-python-boto3" >> README.md
+   33  git init
+   34  git commit -m "first commit"
+   35  git config --global --add safe.directory /workspaces/AWS-Boto3-Python
+   36  git commit -m "first commit"
+   37  touch .gitignore
+   38  nano .gitignore
+   39  git add .devcontainer/ Boto3App/ README.md aws/ commands.txt
+   40  git commit -m "Initial commit with app code, infra, and dev container config"
+   41  git add .devcontainer/ Boto3App/ README.md aws/ commands.txt
+   42  git status
+   43  git push
+   44  git remote add origin https://github.com/devops-anilgupta/aws-python-boto3.git
+   45  git push -u origin main
+   46  git branch -M main
+   47  git remote add origin https://github.com/devops-anilgupta/aws-python-boto3.git
+   48  git push -u origin main
+   49  git push
+   50  git push --set-upstream origin main
+   51  git add .
+   52  git commit -m "Initial commit"
+   53  git push
+   54  git remote add origin https://github.com/devops-anilgupta/aws-python-boto3.git
+   55  git push -u origin main
+   56  sam --version
+   57  sudo apt-get update && sudo apt-get install -y unzip curl python3-pip
+   58  pwd
+   59  ls -la
+   60  sh install-sam-inside-container.sh 
+   61  aws --version
+   62  aws configure list
+   63  aws configure list-profiles
+   64  aws s3 ls
+   65  aws s3 ls --profile dev
+   66  ls -la
+   67  sam --version
+   68  ls -la
+   69  which sam
+   70  python --version
+   71  ls -la
+   72  cd Boto3App/
+   73  ls -la
+   74  cd lambdas/
+   75  ls -la
+   76  cd check_idle_ec2/
+   77  ls -la
+   78  sam build
+   79  sam validate
+   80  sam validate --profile dev
+   81  sam build --profile dev
+   82  sam deploy --guided --profile dev
+   83  cd Boto3App/
+   84  ls -la
+   85  cd lambdas/
+   86  ls -la
+   87  cd check_idle_ec2/
+   88  ls -la
+   89  sam build --profile dev
+   90  sam validate --profile dev
+   91  sam validate --profile dev --lint
+   92  sam deploy --guided --profile dev
+   93  history
