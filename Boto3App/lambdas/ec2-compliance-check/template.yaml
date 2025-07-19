@@ -1,0 +1,98 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  EC2 Instance Compliance Checker using AWS Config, Lambda, and SNS.
+  Notifies via email if EC2 instance is launched with an unapproved instance type.
+
+Parameters:
+  AllowedInstanceTypes:
+    Type: String
+    Description: Comma-separated list of allowed EC2 instance types for this environment.
+  NotificationEmail:
+    Type: String
+    Description: Email address to receive compliance violation notifications.
+
+Resources:
+
+  ComplianceSNSTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: !Sub ec2-compliance-topic-${AWS::StackName}
+
+  ComplianceEmailSubscription:
+    Type: AWS::SNS::Subscription
+    Properties:
+      TopicArn: !Ref ComplianceSNSTopic
+      Protocol: email
+      Endpoint: !Ref NotificationEmail
+
+  ComplianceLambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub ec2-compliance-lambda-role-${AWS::StackName}
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: LambdaCompliancePolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - sns:Publish
+                  - config:PutEvaluations
+                Resource: "*"
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: "*"
+
+  ComplianceFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub ec2-compliance-check-${AWS::StackName}
+      CodeUri: ec2ComplianceCheck/
+      Handler: app.lambda_handler
+      Runtime: python3.11
+      Timeout: 10
+      MemorySize: 128
+      Role: !GetAtt ComplianceLambdaRole.Arn
+      Environment:
+        Variables:
+          ALLOWED_TYPES: !Ref AllowedInstanceTypes
+          SNS_TOPIC_ARN: !Ref ComplianceSNSTopic
+
+  ConfigRule:
+    Type: AWS::Config::ConfigRule
+    Properties:
+      ConfigRuleName: !Sub ec2-instance-type-compliance-${AWS::StackName}
+      Description: Detects EC2 instance types outside the allowed list and reports as NON_COMPLIANT.
+      Scope:
+        ComplianceResourceTypes:
+          - AWS::EC2::Instance
+      Source:
+        Owner: CUSTOM_LAMBDA
+        SourceIdentifier: !GetAtt ComplianceFunction.Arn
+
+  LambdaInvokePermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref ComplianceFunction
+      Action: lambda:InvokeFunction
+      Principal: config.amazonaws.com
+      SourceAccount: !Ref AWS::AccountId
+
+Outputs:
+  SNSTopic:
+    Description: SNS topic for compliance notifications
+    Value: !Ref ComplianceSNSTopic
+  LambdaFunction:
+    Description: Lambda function ARN
+    Value: !GetAtt ComplianceFunction.Arn

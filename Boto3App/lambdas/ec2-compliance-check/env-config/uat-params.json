@@ -1,0 +1,10 @@
+[
+  {
+    "ParameterKey": "AllowedInstanceTypes",
+    "ParameterValue": "t2.micro,t2.small"
+  },
+  {
+    "ParameterKey": "NotificationEmail",
+    "ParameterValue": "dev-team@example.com"
+  }
+]

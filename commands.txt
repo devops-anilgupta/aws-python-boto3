@@ -1,7 +1,8 @@
 //Setting up AWS IAM user 
 aws configure list-profiles
 aws configure --profile dev
-aws s3 ls --profile dev
+aws s3 ls --profile 
+aws sts get-caller-identity --profile dev
 
 //Executing the python file 
 python <<file_name>>.py 
@@ -11,6 +12,7 @@ sam build --profile dev
 sam validate --profile dev --lint
 sam deploy --guided --profile dev
 aws cloudformation delete-stack --stack-name checkIdleEc2 --profile dev
+aws cloudformation list-stacks --profile dev
 
 //This is to return aws lambda functions
     aws lambda list-functions --profile dev --region us-east-1

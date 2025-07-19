@@ -1,0 +1,3 @@
+{
+  "invokingEvent": "{\"configurationItem\": {\"resourceId\": \"i-0123456789abcdef0\", \"configuration\": {\"instanceType\": \"t3.large\"}, \"tags\": {\"Environment\": \"Dev\"}}}"
+}

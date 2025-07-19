@@ -1,0 +1,65 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Scheduled EC2 Monitoring Email
+Parameters:
+  SSMParameterName:
+    Type: String
+    Default: /prod/ec2-instance-ids
+  SNSTopicARN:
+    Type: String
+    Description: ARN of the SNS topic for email alerts
+Resources:
+  MonitoringFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: ec2-monitoring-summary
+      CodeUri: MonitoringFunction
+      Handler: cloudwatch_summary.lambda_handler
+      Runtime: python3.11
+      MemorySize: 128
+      Timeout: 60
+      Environment:
+        Variables:
+          SSM_PARAM_NAME:
+            Ref: SSMParameterName
+          SNS_TOPIC_ARN:
+            Ref: SNSTopicARN
+      Policies:
+      - Statement:
+        - Effect: Allow
+          Action:
+          - ssm:GetParameter
+          - cloudwatch:GetMetricStatistics
+          - sns:Publish
+          Resource: '*'
+    Metadata:
+      SamResourceId: MonitoringFunction
+  MorningSchedule:
+    Type: AWS::Events::Rule
+    Properties:
+      ScheduleExpression: cron(30 3 * * ? *)
+      State: ENABLED
+      Targets:
+      - Arn:
+          Fn::GetAtt:
+          - MonitoringFunction
+          - Arn
+        Id: MorningTarget
+  EveningSchedule:
+    Type: AWS::Events::Rule
+    Properties:
+      ScheduleExpression: cron(30 12 * * ? *)
+      State: ENABLED
+      Targets:
+      - Arn:
+          Fn::GetAtt:
+          - MonitoringFunction
+          - Arn
+        Id: EveningTarget
+Outputs:
+  LambdaFunction:
+    Value:
+      Ref: MonitoringFunction
+  SNSTopicARN:
+    Value:
+      Ref: SNSTopicARN

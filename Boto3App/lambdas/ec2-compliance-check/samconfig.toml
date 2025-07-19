@@ -1,0 +1,11 @@
+version = 0.1
+
+[default.deploy.parameters]
+stack_name = "ec2-compliance-check"
+resolve_s3 = true
+s3_prefix = "ec2-compliance-check"
+region = "us-east-1"
+profile = "dev"
+capabilities = "CAPABILITY_IAM"
+parameter_overrides = "Environment=\"dev\" AllowedInstanceTypes=\"t2.micro,t2.medium\""
+image_repositories = []

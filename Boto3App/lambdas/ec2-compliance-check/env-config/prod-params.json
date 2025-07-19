@@ -1,0 +1,4 @@
+{
+  "Environment": "prod",
+  "AllowedInstanceTypes": "t3.medium,m5.large"
+}
